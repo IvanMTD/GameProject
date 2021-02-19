@@ -5,14 +5,19 @@ import ru.phoenix.engine.core.buffer.ubo.ProjectionUniforms;
 import ru.phoenix.engine.core.buffer.ubo.UniformBufferObject;
 import ru.phoenix.engine.core.configuration.WindowConfig;
 import ru.phoenix.engine.core.control.Input;
+import ru.phoenix.game.scenes.Scene;
+import ru.phoenix.game.scenes.logo.LogoScene;
 
 import static org.lwjgl.glfw.GLFW.glfwInit;
 import static org.lwjgl.glfw.GLFW.glfwTerminate;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
+import static ru.phoenix.engine.core.constants.GameInfo.LOGO_SCENE;
 import static ru.phoenix.engine.core.constants.System.NANOSECOND;
 
 public class MainLoop {
+
+    private Scene logoScene;
 
     private Render render;
     private UniformBufferObject uboProjection;
@@ -31,12 +36,15 @@ public class MainLoop {
         // init vatiable
         render = new Render();
         uboProjection = new ProjectionUniforms();
+
+        logoScene = new LogoScene(LOGO_SCENE);
     }
 
     public void init(){
         setDefaultParam();
         render.init();
         uboProjection.allocate(0);
+        logoScene.init();
     }
 
     private void setDefaultParam(){
@@ -113,10 +121,11 @@ public class MainLoop {
     private void update() {
         Window.getInstance().titleUpdate(getFps());
         Input.getInstance().update();
+        uboProjection.update();
     }
 
     private void render(){
-        render.rendering();
+        render.rendering(logoScene);
     }
 
     private void cleanUp() {

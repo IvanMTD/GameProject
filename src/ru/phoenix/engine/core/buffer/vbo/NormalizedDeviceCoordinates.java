@@ -1,25 +1,23 @@
 package ru.phoenix.engine.core.buffer.vbo;
 
 import ru.phoenix.engine.core.buffer.template.ObjectConfiguration;
+import ru.phoenix.engine.math.variable.Matrix4f;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.lwjgl.opengl.GL11.GL_FLOAT;
+import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
-import static org.lwjgl.opengl.GL15.GL_STATIC_DRAW;
 import static org.lwjgl.opengl.GL20.*;
-import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
 import static org.lwjgl.opengl.GL30.*;
 
-public class BoardVbo implements VertexBufferObject{
-
-    private final int vao;
-    private final List<Integer> vbo;
-    private final int ibo;
+public class NormalizedDeviceCoordinates implements VertexBufferObject {
+    private int vao;
+    private List<Integer> vbo;
+    private int ibo;
     private int size;
 
-    public BoardVbo(){
+    public NormalizedDeviceCoordinates(){
         vao = glGenVertexArrays();
         vbo = new ArrayList<>();
         for(int i=0; i<2; i++){
@@ -30,7 +28,7 @@ public class BoardVbo implements VertexBufferObject{
     }
 
     @Override
-    public void allocate(ObjectConfiguration objectConfiguration) {
+    public void allocate(ObjectConfiguration objectConfiguration){
         size = objectConfiguration.getIndices().length;
         glBindVertexArray(vao);
 

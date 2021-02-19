@@ -13,6 +13,10 @@ public class ObjectConfiguration {
     private Matrix4f[] instances;
     private int[] indices;
 
+    public ObjectConfiguration(){
+
+    }
+
     public ObjectConfiguration(float[] positions, float[] normals, float[] textureCoords, float[] tangents, float[] biTangents, int[] boneIds, float[] boneWeights, Matrix4f[] instances, int[] indices) {
         setPositions(positions);
         setNormals(normals);

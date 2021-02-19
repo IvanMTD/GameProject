@@ -35,6 +35,8 @@ public class Camera implements Externalizable {
     private void init(){
         perspective = new Projection();
         ortho = new Projection();
+
+        setOrtho();
     }
 
     public void update(){
@@ -68,7 +70,7 @@ public class Camera implements Externalizable {
         float top = 0.0f;
         float bottom = WindowConfig.getInstance().getHeight();
         float near = -1.0f;
-        float far = 100.0f;
+        float far = WindowConfig.getInstance().getzFar();
         ortho.setOrtho(left,right,bottom,top,near,far);
     }
 
