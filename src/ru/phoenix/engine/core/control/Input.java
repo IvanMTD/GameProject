@@ -72,7 +72,7 @@ public class Input {
     }
 
     public void update(){
-        cursorMove = false;
+        setCursorMove(false);
         setScrollOffset(0.0f);
         glfwPollEvents();
     }
@@ -89,7 +89,7 @@ public class Input {
         cursorMove = value;
     }
 
-    public boolean getCursorMove(){
+    public boolean isCursorMove(){
         return cursorMove;
     }
 

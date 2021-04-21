@@ -3,8 +3,10 @@ package ru.phoenix.engine.core.kernel;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import ru.phoenix.engine.core.buffer.ubo.ProjectionUniforms;
 import ru.phoenix.engine.core.buffer.ubo.UniformBufferObject;
+import ru.phoenix.engine.core.configuration.ActiveButtons;
 import ru.phoenix.engine.core.configuration.WindowConfig;
 import ru.phoenix.engine.core.control.Input;
+import ru.phoenix.game.control.GameController;
 import ru.phoenix.game.scenes.Scene;
 import ru.phoenix.game.scenes.logo.LogoScene;
 
@@ -22,7 +24,7 @@ public class MainLoop {
     private Render render;
     private UniformBufferObject uboProjection;
 
-    private int fps;
+    private static int fps;
     private static final float framerate = 200;
     private static final float frameTime = 1.0f / framerate;
     private boolean isRunning;
@@ -42,6 +44,7 @@ public class MainLoop {
 
     public void init(){
         setDefaultParam();
+        ActiveButtons.getInstance();
         render.init();
         uboProjection.allocate(0);
         logoScene.init();
@@ -73,7 +76,7 @@ public class MainLoop {
         double unprocessedTime = 0;
 
         while(isRunning) {
-            boolean render = false;
+            boolean renderAndUpdate = false;
 
             long startTime = System.nanoTime();
             long passedTime = startTime - lastTime;
@@ -83,12 +86,12 @@ public class MainLoop {
             frameCounter += passedTime;
 
             while (unprocessedTime > frameTime) {
-                render = true;
+                renderAndUpdate = true;
                 unprocessedTime -= frameTime;
                 if (Window.getInstance().isCloseRequested()) {
                     stop();
                 }
-                update();
+
                 if (frameCounter >= NANOSECOND) {
                     setFps(frames);
                     frames = 0;
@@ -96,10 +99,11 @@ public class MainLoop {
                 }
             }
 
-            if (render) {
+            if (renderAndUpdate) {
+                update();
                 render();
                 frames++;
-            } else {
+            }else {
                 try {
                     Thread.sleep(10);
                 } catch (InterruptedException e) {
@@ -121,7 +125,10 @@ public class MainLoop {
     private void update() {
         Window.getInstance().titleUpdate(getFps());
         Input.getInstance().update();
+        GameController.getInstance().update();
         uboProjection.update();
+
+        logoScene.update();
     }
 
     private void render(){
@@ -133,11 +140,11 @@ public class MainLoop {
         glfwTerminate();
     }
 
-    public int getFps() {
+    public static int getFps() {
         return fps;
     }
 
-    private void setFps(int fps) {
-        this.fps = fps;
+    private static void setFps(int fps) {
+        MainLoop.fps = fps;
     }
 }

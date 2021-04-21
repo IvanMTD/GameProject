@@ -20,6 +20,12 @@ public class Vector3f implements Externalizable {
         setZ(0.0f);
     }
 
+    public Vector3f(Vector2f v, float z){
+        setX(v.getX());
+        setY(v.getY());
+        setZ(z);
+    }
+
     public Vector3f(float x, float y, float z){
         setX(x);
         setY(y);

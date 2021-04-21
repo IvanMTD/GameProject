@@ -1,5 +1,6 @@
 package ru.phoenix.engine.core.configuration;
 
+import java.awt.*;
 import java.io.*;
 
 public class WindowConfig implements Externalizable {
@@ -16,18 +17,20 @@ public class WindowConfig implements Externalizable {
     private float contrast;
     private float zNear;
     private float zFar;
-    private String langueage;
+    private String language;
 
     public WindowConfig() throws IOException, ClassNotFoundException {
         File direct = new File("./data/save/config");
         File file = new File(direct,"WindowConfig.ser");
         if(file.exists()){
+            System.out.println("\"Window Config\" file exist");
             FileInputStream fileInputStream = null;
             fileInputStream = new FileInputStream("./data/save/config/WindowConfig.ser");
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
             readExternal(objectInputStream);
             objectInputStream.close();
         }else{
+            System.out.println("\"Window Config\" file not exist");
             setDefault();
             FileOutputStream fileOutputStream = null;
             fileOutputStream = new FileOutputStream("./data/save/config/WindowConfig.ser");
@@ -35,9 +38,10 @@ public class WindowConfig implements Externalizable {
             writeExternal(objectOutputStream);
             objectOutputStream.close();
         }
+        setDevelopConfig();
     }
 
-    public void setDefault(){
+    public void setDevelopConfig(){
         setFullScreen(false);
         setWidth(1280);
         setHeight(720);
@@ -46,7 +50,19 @@ public class WindowConfig implements Externalizable {
         setContrast(0.0f);
         setzNear(0.01f);
         setzFar(300.0f);
-        setLangueage("ENGLISH");
+        setLanguage("ENGLISH");
+    }
+
+    public void setDefault(){
+        setFullScreen(true);
+        setWidth(GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode().getWidth());
+        setHeight(GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode().getHeight());
+        setSamples(4);
+        setGamma(2.2f);
+        setContrast(0.0f);
+        setzNear(0.01f);
+        setzFar(300.0f);
+        setLanguage("ENGLISH");
     }
 
     public boolean isFullScreen() {
@@ -113,21 +129,38 @@ public class WindowConfig implements Externalizable {
         this.zFar = zFar;
     }
 
-    public String getLangueage() {
-        return langueage;
+    public String getLanguage() {
+        return language;
     }
 
-    public void setLangueage(String langueage) {
-        this.langueage = langueage;
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    public void save() throws IOException {
+        File direct = new File("./data/save/config");
+        File file = new File(direct,"WindowConfig.ser");
+        if(file.exists()){
+            file.delete();
+            FileOutputStream fileOutputStream = null;
+            fileOutputStream = new FileOutputStream("./data/save/config/WindowConfig.ser");
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+            writeExternal(objectOutputStream);
+            objectOutputStream.close();
+        }else{
+            FileOutputStream fileOutputStream = null;
+            fileOutputStream = new FileOutputStream("./data/save/config/WindowConfig.ser");
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+            writeExternal(objectOutputStream);
+            objectOutputStream.close();
+        }
     }
 
     public static WindowConfig getInstance(){
         if(instance == null){
             try {
                 instance = new WindowConfig();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
+            } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
         }
@@ -144,7 +177,7 @@ public class WindowConfig implements Externalizable {
         out.writeObject(getContrast());
         out.writeObject(getzNear());
         out.writeObject(getzFar());
-        out.writeObject(getLangueage());
+        out.writeObject(getLanguage());
     }
 
     @Override
@@ -157,6 +190,6 @@ public class WindowConfig implements Externalizable {
         setContrast((float)in.readObject());
         setzNear((float)in.readObject());
         setzFar((float)in.readObject());
-        setLangueage((String)in.readObject());
+        setLanguage((String)in.readObject());
     }
 }

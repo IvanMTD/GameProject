@@ -7,5 +7,4 @@ public interface HeadUpDisplay {
     void init();
     void update();
     void draw(Shader shader);
-    int getResolutionID();
 }

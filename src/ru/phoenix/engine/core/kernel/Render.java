@@ -8,11 +8,10 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL11.GL_STENCIL_BUFFER_BIT;
 
 public class Render {
-
-    private Framework baseRenderFrame;
+    private final Framework baseRenderFrame;
 
     public Render(){
-        baseRenderFrame = new BaseRenderFrame();
+        baseRenderFrame = new BaseRenderFrame(2);
     }
 
     public void init(){

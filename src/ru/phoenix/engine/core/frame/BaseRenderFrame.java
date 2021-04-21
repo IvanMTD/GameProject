@@ -1,5 +1,6 @@
 package ru.phoenix.engine.core.frame;
 
+import org.lwjgl.BufferUtils;
 import ru.phoenix.engine.core.buffer.fbo.FrameBufferObject;
 import ru.phoenix.engine.core.buffer.fbo.MultisampleFrameBuffer;
 import ru.phoenix.engine.core.buffer.fbo.OutputFrameBuffer;
@@ -7,8 +8,13 @@ import ru.phoenix.engine.core.buffer.template.ObjectConfiguration;
 import ru.phoenix.engine.core.buffer.vbo.NormalizedDeviceCoordinates;
 import ru.phoenix.engine.core.buffer.vbo.VertexBufferObject;
 import ru.phoenix.engine.core.configuration.WindowConfig;
+import ru.phoenix.engine.core.control.Input;
 import ru.phoenix.engine.core.shader.Shader;
+import ru.phoenix.engine.math.variable.Vector3f;
+import ru.phoenix.game.control.Pixel;
 import ru.phoenix.game.scenes.Scene;
+
+import java.nio.FloatBuffer;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL13.*;
@@ -85,13 +91,29 @@ public class BaseRenderFrame implements Framework {
                     GL_COLOR_BUFFER_BIT, GL_LINEAR
             );
         }
+
+        glBindFramebuffer(GL_FRAMEBUFFER, render.getFrameBuffer());
+        glReadBuffer(GL_COLOR_ATTACHMENT1);
+
+        int[] viewport = new int[4];
+        glGetIntegerv(GL_VIEWPORT,viewport);
+        FloatBuffer data = BufferUtils.createFloatBuffer(4);
+        glReadPixels(
+                (int) Input.getInstance().getCursorPosition().getX(),
+                viewport[3] - (int) Input.getInstance().getCursorPosition().getY(),
+                1,1,GL_RGBA,GL_FLOAT,data
+        );
+
+        Vector3f pixel = new Vector3f(data.get(0),data.get(1),data.get(2));
+        Pixel.setPixel(pixel);
+
         glBindFramebuffer(GL_FRAMEBUFFER,0);
 
         // ВЫВОД НА НДС ЭКРАН
         ndcShader.useProgram();
         // main texture
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, render.getTexture());
+        glBindTexture(GL_TEXTURE_2D, render.getTexture(0));
         ndcShader.setUniform("main_texture",0);
         ndcVbo.draw();
     }
