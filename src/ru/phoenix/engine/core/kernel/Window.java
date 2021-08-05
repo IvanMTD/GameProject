@@ -74,7 +74,7 @@ public class Window {
     }
 
     public void titleUpdate(int fps){
-        glfwSetWindowTitle(window,TITLE + " | " + " | FPS: " + fps);
+        glfwSetWindowTitle(window,TITLE + " | FPS: " + fps);
     }
 
     public void setWindowSize(int width, int height){
@@ -118,6 +118,12 @@ public class Window {
 
     public long getWindow() {
         return window;
+    }
+
+    public float getRatio(){
+        float current = WindowConfig.getInstance().getWidth() + WindowConfig.getInstance().getHeight();
+        float standard = 1920 + 1080;
+        return current / standard;
     }
 
     public static Window getInstance(){

@@ -1,7 +1,6 @@
 package ru.phoenix.engine.math.struct;
 
 import ru.phoenix.engine.core.configuration.WindowConfig;
-import ru.phoenix.engine.core.kernel.Window;
 import ru.phoenix.engine.math.variable.Matrix4f;
 import ru.phoenix.engine.math.variable.Vector3f;
 

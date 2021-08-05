@@ -7,20 +7,15 @@ import ru.phoenix.engine.core.configuration.ActiveButtons;
 import ru.phoenix.engine.core.configuration.WindowConfig;
 import ru.phoenix.engine.core.control.Input;
 import ru.phoenix.game.control.GameController;
-import ru.phoenix.game.scenes.Scene;
-import ru.phoenix.game.scenes.logo.LogoScene;
+import ru.phoenix.game.control.SceneController;
 
 import static org.lwjgl.glfw.GLFW.glfwInit;
 import static org.lwjgl.glfw.GLFW.glfwTerminate;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
-import static ru.phoenix.engine.core.constants.GameInfo.LOGO_SCENE;
 import static ru.phoenix.engine.core.constants.System.NANOSECOND;
 
 public class MainLoop {
-
-    private Scene logoScene;
-
     private Render render;
     private UniformBufferObject uboProjection;
 
@@ -35,11 +30,9 @@ public class MainLoop {
             throw new IllegalStateException("Unable to initialize GLFW");
         }
         Window.getInstance().create(windowConfig);
-        // init vatiable
+        // init variable
         render = new Render();
         uboProjection = new ProjectionUniforms();
-
-        logoScene = new LogoScene(LOGO_SCENE);
     }
 
     public void init(){
@@ -47,7 +40,7 @@ public class MainLoop {
         ActiveButtons.getInstance();
         render.init();
         uboProjection.allocate(0);
-        logoScene.init();
+        SceneController.getInstance();
     }
 
     private void setDefaultParam(){
@@ -127,12 +120,11 @@ public class MainLoop {
         Input.getInstance().update();
         GameController.getInstance().update();
         uboProjection.update();
-
-        logoScene.update();
+        SceneController.getInstance().getCurrentScene().update();
     }
 
     private void render(){
-        render.rendering(logoScene);
+        render.rendering(SceneController.getInstance().getCurrentScene());
     }
 
     private void cleanUp() {
