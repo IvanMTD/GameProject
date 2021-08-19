@@ -29,6 +29,7 @@ void fragmentColor(vec4 rgba){
     if(rgba.a == 0.0f){
         discard;
     }
+
     fragment_color = rgba;
 }
 

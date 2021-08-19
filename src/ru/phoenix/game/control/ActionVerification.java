@@ -1,7 +1,7 @@
 package ru.phoenix.game.control;
 
 import ru.phoenix.engine.core.control.Input;
-import ru.phoenix.engine.core.kernel.MainLoop;
+import ru.phoenix.engine.core.kernel.CoreEngine;
 
 import static ru.phoenix.engine.core.constants.GameInfo.*;
 
@@ -20,7 +20,7 @@ public class ActionVerification {
     }
 
     public int actionVerification (int key){
-        clickRate = MainLoop.getFps() / 2;
+        clickRate = CoreEngine.getFps() / 2;
 
         if (Input.getInstance().isMousePressed(key)) {
             counter++;

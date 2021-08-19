@@ -1,7 +1,12 @@
 package ru.phoenix.engine.core.configuration;
 
+import ru.phoenix.engine.core.loader.text.Alphabet;
+import ru.phoenix.engine.core.loader.text.Letter;
+
 import java.awt.*;
 import java.io.*;
+
+import static ru.phoenix.engine.core.constants.System.ENGLISH_LANGUAGE;
 
 public class WindowConfig implements Externalizable {
 
@@ -17,7 +22,7 @@ public class WindowConfig implements Externalizable {
     private float contrast;
     private float zNear;
     private float zFar;
-    private String language;
+    private int language;
 
     public WindowConfig() throws IOException, ClassNotFoundException {
         File direct = new File("./data/save/config");
@@ -50,7 +55,7 @@ public class WindowConfig implements Externalizable {
         setContrast(0.0f);
         setzNear(0.01f);
         setzFar(300.0f);
-        setLanguage("ENGLISH");
+        setLanguage(ENGLISH_LANGUAGE);
     }
 
     public void setDefault(){
@@ -62,7 +67,7 @@ public class WindowConfig implements Externalizable {
         setContrast(0.0f);
         setzNear(0.01f);
         setzFar(300.0f);
-        setLanguage("ENGLISH");
+        setLanguage(ENGLISH_LANGUAGE);
     }
 
     public boolean isFullScreen() {
@@ -129,12 +134,17 @@ public class WindowConfig implements Externalizable {
         this.zFar = zFar;
     }
 
-    public String getLanguage() {
+    public int getLanguage() {
         return language;
     }
 
-    public void setLanguage(String language) {
+    public void setLanguage(int language) {
         this.language = language;
+    }
+
+    public void setExtendedLanguage(int language){
+        this.language = language;
+        Alphabet.getInstance().setCurrentLanguage();
     }
 
     public void save() throws IOException {
@@ -190,6 +200,6 @@ public class WindowConfig implements Externalizable {
         setContrast((float)in.readObject());
         setzNear((float)in.readObject());
         setzFar((float)in.readObject());
-        setLanguage((String)in.readObject());
+        setLanguage((int)in.readObject());
     }
 }

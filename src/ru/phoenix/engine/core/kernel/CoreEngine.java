@@ -3,6 +3,7 @@ package ru.phoenix.engine.core.kernel;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import ru.phoenix.engine.core.buffer.ubo.ProjectionUniforms;
 import ru.phoenix.engine.core.buffer.ubo.UniformBufferObject;
+import ru.phoenix.engine.core.buffer.util.Time;
 import ru.phoenix.engine.core.configuration.ActiveButtons;
 import ru.phoenix.engine.core.configuration.WindowConfig;
 import ru.phoenix.engine.core.control.Input;
@@ -15,7 +16,7 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
 import static ru.phoenix.engine.core.constants.System.NANOSECOND;
 
-public class MainLoop {
+public class CoreEngine {
     private Render render;
     private UniformBufferObject uboProjection;
 
@@ -33,6 +34,10 @@ public class MainLoop {
         // init variable
         render = new Render();
         uboProjection = new ProjectionUniforms();
+    }
+
+    public void soundOn(){
+        Sound.getInstance().soundOn();
     }
 
     public void init(){
@@ -116,6 +121,7 @@ public class MainLoop {
     }
 
     private void update() {
+        Time.update();
         Window.getInstance().titleUpdate(getFps());
         Input.getInstance().update();
         GameController.getInstance().update();
@@ -128,7 +134,9 @@ public class MainLoop {
     }
 
     private void cleanUp() {
+        System.out.println("All data is clean.");
         Window.getInstance().dispose();
+        Sound.getInstance().dispose();
         glfwTerminate();
     }
 
@@ -137,6 +145,6 @@ public class MainLoop {
     }
 
     private static void setFps(int fps) {
-        MainLoop.fps = fps;
+        CoreEngine.fps = fps;
     }
 }

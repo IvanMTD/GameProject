@@ -2,14 +2,20 @@ package ru.phoenix.engine.core.buffer.util;
 
 import ru.phoenix.engine.core.buffer.template.ObjectConfiguration;
 import ru.phoenix.engine.core.configuration.WindowConfig;
+import ru.phoenix.engine.core.kernel.Window;
 import ru.phoenix.engine.math.struct.Perlin2D;
 
 public class Collector {
     // VERTEX COLLECTOR
-    public static ObjectConfiguration collectVertexBufferCenter(int width, int height){
+    public static ObjectConfiguration collectVertexBufferCenter(int textureWidth, int textureHeight, float percentOfWindow){
 
-        float hw = width / 2.0f;
-        float hh = height / 2.0f;
+        float windowWidth = WindowConfig.getInstance().getWidth();
+
+        float newTextureWidth = windowWidth * percentOfWindow / 100.0f;
+        float diffTextureWidth = newTextureWidth * 100.0f / textureWidth;
+        float newTextureHeight = textureHeight * diffTextureWidth / 100.0f;
+        float hw = newTextureWidth / 2.0f;
+        float hh = newTextureHeight / 2.0f;
 
         float[] position = new float[]{
                -hw,  hh, 0.0f,
@@ -23,6 +29,36 @@ public class Collector {
                 0.0f, 0.0f,
                 1.0f, 0.0f,
                 1.0f, 1.0f
+        };
+
+        int[] indices = new int[]{
+                0, 1, 2,
+                0, 2, 3
+        };
+
+        return new ObjectConfiguration(position,textureCords,indices);
+    }
+
+    public static ObjectConfiguration collectVertexBufferLeftUp(int textureWidth, int textureHeight, float percentOfWindow){
+
+        float windowWidth = WindowConfig.getInstance().getWidth();
+
+        float nw = windowWidth * percentOfWindow / 100.0f;
+        float diffTextureWidth = nw * 100.0f / textureWidth;
+        float nh = textureHeight * diffTextureWidth / 100.0f;
+
+        float[] position = new float[]{
+                0.0f,  0.0f,  0.0f,
+                0.0f,    nh,  0.0f,
+                  nw,    nh,  0.0f,
+                  nw,  0.0f,  0.0f
+        };
+
+        float[] textureCords = new float[]{
+                0.0f, 0.0f,
+                0.0f, 1.0f,
+                1.0f, 1.0f,
+                1.0f, 0.0f
         };
 
         int[] indices = new int[]{

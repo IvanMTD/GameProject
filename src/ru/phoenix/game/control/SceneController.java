@@ -2,11 +2,11 @@ package ru.phoenix.game.control;
 
 import ru.phoenix.game.scenes.Scene;
 import ru.phoenix.game.scenes.logo.LogoScene;
+import ru.phoenix.game.scenes.menu.MenuScene;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-
-import static ru.phoenix.engine.core.constants.GameInfo.LOGO_SCENE;
 
 public class SceneController {
 
@@ -15,12 +15,15 @@ public class SceneController {
     private List<Scene> scenes;
 
     private Scene logoScene;
+    private Scene menuScene;
 
     public SceneController(){
         scenes = new ArrayList<>();
-        logoScene = new LogoScene(LOGO_SCENE);
-        logoScene.init(true);
-        scenes.add(logoScene);
+        logoScene = new LogoScene();
+        logoScene.init(false);
+        menuScene = new MenuScene();
+        menuScene.init(true);
+        scenes.addAll(Arrays.asList(logoScene,menuScene));
     }
 
     public Scene getCurrentScene(){

@@ -4,6 +4,7 @@ import org.lwjgl.glfw.GLFWImage;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.system.MemoryStack;
+import ru.phoenix.engine.core.buffer.util.Time;
 import ru.phoenix.engine.core.configuration.WindowConfig;
 import ru.phoenix.engine.core.constants.System;
 import ru.phoenix.engine.core.loader.ImageLoader;
@@ -74,7 +75,7 @@ public class Window {
     }
 
     public void titleUpdate(int fps){
-        glfwSetWindowTitle(window,TITLE + " | FPS: " + fps);
+        glfwSetWindowTitle(window,TITLE + " | FPS: " + fps + " | " + Time.getCurrentTime());
     }
 
     public void setWindowSize(int width, int height){
@@ -118,12 +119,6 @@ public class Window {
 
     public long getWindow() {
         return window;
-    }
-
-    public float getRatio(){
-        float current = WindowConfig.getInstance().getWidth() + WindowConfig.getInstance().getHeight();
-        float standard = 1920 + 1080;
-        return current / standard;
     }
 
     public static Window getInstance(){
