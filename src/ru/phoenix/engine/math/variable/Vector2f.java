@@ -111,8 +111,8 @@ public class Vector2f implements Externalizable {
     }
 
     // инфо отладка
-    public static void vectorInfo(Vector2f v){
-        System.out.println("Vector info: x: " + v.getX() + ", y: " + v.getY() + "\n");
+    public String toString(){
+        return x + " | " + y;
     }
 
     @Override

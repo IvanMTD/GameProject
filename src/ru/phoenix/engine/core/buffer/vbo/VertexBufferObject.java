@@ -34,6 +34,8 @@ public class VertexBufferObject {
     private final int drawInfo;
     private final int drawMethod;
 
+    private ObjectConfiguration objectConfig;
+
     public VertexBufferObject(){
         vao = glGenVertexArrays();
         vbo = new ArrayList<>();
@@ -75,6 +77,7 @@ public class VertexBufferObject {
     }
 
     public void allocate(ObjectConfiguration objectConfiguration){
+        objectConfig = new ObjectConfiguration(objectConfiguration);
         if(objectConfiguration.getIndices() != null) {
             int v4size = (int) Math.pow(Float.BYTES, 2);
 
@@ -313,6 +316,30 @@ public class VertexBufferObject {
         if(objectConfiguration.getInstances() != null){
             this.instances = true;
         }
+    }
+
+    public void setNewPos(float[] position){
+
+        float[] p1 = position;
+        float[] p2 = objectConfig.getPositions();
+        float[] pos = new float[p1.length];
+
+        for(int i=0; i<p1.length; i++){
+            pos[i] = p1[i] + p2[i];
+        }
+
+        objectConfig.setPositions(pos);
+
+        glBindVertexArray(vao);
+        glDeleteBuffers(vbo.get(0));
+        vbo.set(0,glGenBuffers());
+        glBindBuffer(GL_ARRAY_BUFFER, vbo.get(0));
+        glBufferData(GL_ARRAY_BUFFER, pos, drawInfo);
+        glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
+    }
+
+    public float[] getCurrentPosition(){
+        return objectConfig.getPositions();
     }
 
     public boolean isAnimated() {

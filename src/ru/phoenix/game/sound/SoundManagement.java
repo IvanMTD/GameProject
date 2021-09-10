@@ -18,10 +18,10 @@ public class SoundManagement {
         position = new Vector3f();
     }
 
-    public void init(String path){
+    public void init(String path, int loopStatus){
         audio.setup(path);
         alSourcei(source, AL_BUFFER, audio.getAudioID());
-        alSourcei(source,AL_LOOPING, AL_TRUE);
+        alSourcei(source,AL_LOOPING, loopStatus);
     }
 
     public void playSound(){

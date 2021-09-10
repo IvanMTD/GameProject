@@ -7,9 +7,12 @@ import ru.phoenix.engine.core.shader.Shader;
 import ru.phoenix.engine.math.variable.Vector3f;
 import ru.phoenix.game.control.SceneController;
 import ru.phoenix.game.hud.HeadUpDisplay;
+import ru.phoenix.game.hud.subtype.Board;
+import ru.phoenix.game.hud.template.HudDataset;
 import ru.phoenix.game.scenes.Scene;
 import ru.phoenix.game.sound.SoundManagement;
 
+import static org.lwjgl.openal.AL10.AL_TRUE;
 import static ru.phoenix.engine.core.constants.GameInfo.LOGO_SCENE;
 import static ru.phoenix.engine.core.constants.GameInfo.MENU_SCENE;
 import static ru.phoenix.engine.core.constants.SoundInfo.LOGO_SOUND;
@@ -34,12 +37,8 @@ public class LogoScene implements Scene {
 
     public LogoScene(){
         shaderHUD = new Shader();
-        float x = WindowConfig.getInstance().getWidth() * 0.5f;
-        float y = WindowConfig.getInstance().getHeight() * 0.5f;
-        mainLogo = new HeadUpDisplay(STATIC_BOARD,new Vector3f(x,y,0.0f),GROUP_A,0.0f);
-        x = WindowConfig.getInstance().getWidth() * 0.085f;
-        y = WindowConfig.getInstance().getHeight() * 0.96f;
-        lwjglLogo = new HeadUpDisplay(STATIC_BOARD, new Vector3f(x,y,0.0f),GROUP_A,0.0f);
+        mainLogo = new Board();
+        lwjglLogo = new Board();
         sound = new SoundManagement();
     }
 
@@ -59,9 +58,13 @@ public class LogoScene implements Scene {
     }
 
     private void initializeVariable(){
-        mainLogo.init(LOGO_SCENE_MAIN_LOGO, 20.0f);
-        lwjglLogo.init(LOGO_SCENE_LWJGL_LOGO,15.0f);
-        sound.init(LOGO_SOUND);
+        float x = WindowConfig.getInstance().getWidth() * 0.5f;
+        float y = WindowConfig.getInstance().getHeight() * 0.5f;
+        mainLogo.init(new HudDataset(20.0f,LOGO_SCENE_MAIN_LOGO,new Vector3f(x,y,0.0f)));
+        x = WindowConfig.getInstance().getWidth() * 0.085f;
+        y = WindowConfig.getInstance().getHeight() * 0.96f;
+        lwjglLogo.init(new HudDataset(15.0f,LOGO_SCENE_LWJGL_LOGO,new Vector3f(x,y,0.0f)));
+        sound.init(LOGO_SOUND,AL_TRUE);
     }
 
     @Override
@@ -122,6 +125,7 @@ public class LogoScene implements Scene {
     private void useShader(Shader shader){
         shader.useProgram();
         shader.setUniformBlock("matrices",0);
+        shader.setUniform("isWindowContext",0);
     }
 
     @Override

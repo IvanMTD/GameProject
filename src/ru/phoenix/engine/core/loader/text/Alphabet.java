@@ -148,7 +148,6 @@ public class Alphabet {
         setUniforms(shader);
         char[] symbols = text.toCharArray();
         Vector3f positionOffset = new Vector3f(position);
-        boolean first = true;
         if(printingType == LEFT_ALIGNMENT){
             for(Character symbol : symbols){
                 Letter letter = alphabet.get(symbol);
@@ -157,21 +156,13 @@ public class Alphabet {
                 positionOffset = new Vector3f(positionOffset.add(new Vector3f(distanceBetweenLetters,0.0f,0.0f)));
             }
         }else if(printingType == CENTER_ALIGNMENT){
-            for(Character symbol : symbols){
-                if(symbols.length % 2 == 0){
-                    if(first){
-                        float offset = (symbols.length / 2.0f) * (int)distanceBetweenLetters;
-                        positionOffset = new Vector3f(position.getX() - offset, position.getY(), position.getZ());
-                        first = false;
-                    }else{
-                        Letter letter = alphabet.get(symbol);
-                        letter.update(positionOffset,letterSize);
-                        letter.draw(shader);
-                        positionOffset = new Vector3f(positionOffset.add(new Vector3f(distanceBetweenLetters,0.0f,0.0f)));
-                    }
-                }else{
-
-                }
+            float offset = (symbols.length / 2.5f) * distanceBetweenLetters;
+            positionOffset = new Vector3f(position.getX() - offset, position.getY(), position.getZ());
+            for(Character symbol : symbols) {
+                Letter letter = alphabet.get(symbol);
+                letter.update(positionOffset, letterSize);
+                letter.draw(shader);
+                positionOffset = new Vector3f(positionOffset.add(new Vector3f(distanceBetweenLetters, 0.0f, 0.0f)));
             }
         }else if(printingType == RIGHT_ALIGNMENT){
             for(Character symbol : symbols){
